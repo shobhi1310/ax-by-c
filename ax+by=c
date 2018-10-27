@@ -1,0 +1,62 @@
+#include<iostream>
+using namespace std;
+
+class Triplet{
+  public:
+     int gcd;
+     int x;
+     int y;
+};
+
+
+Triplet extendedEuclid(int a, int b){
+  if(b==0){
+    Triplet smallans;
+    smallans.x = a;
+    smallans.y = 0;
+    smallans.gcd = a;
+  }
+  
+  
+  Triplet smallans = extendedEuclid(b,a%b);
+  Triplet myans;
+  myans.x = smallans.y;
+  myans.y = (smallans.x -(a/b)*smallans.y);
+  myans.gcd = smallans.gcd;
+}
+
+int modInverse(int a,int b){
+    Triplet ans = extendedEuclid(a,b);
+    int m = ans.x;
+    return m;
+}
+
+int sol (int a, int b, int c){
+  int y = c*modInverse(b,a);
+  int n = (c/b-y)/a;
+  return n+1;
+}
+
+
+int main(){
+	int n;
+  scanf("%d",&n);
+  int a[n][3];
+  int b[n];
+  for(int i=0;i<n;i++){
+    for(int j=0;j<3;j++){
+      scanf("%d",&a[i][j]);
+    }
+  }
+  
+  for(int k=0;k<n;k++){
+    int m = sol(a[k][0],a[k][1],a[k][2]);
+    cout<<m<<endl;
+  }
+  
+  /*for(int m=0;m<n;m++){
+    printf("%d",b[m]);
+    printf("\n");
+  }*/
+	return 0;
+}
