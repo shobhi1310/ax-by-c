@@ -1,20 +1,22 @@
 #include<iostream>
+typedef long long ll;
 using namespace std;
 
 class Triplet{
   public:
-     int gcd;
-     int x;
-     int y;
+     ll gcd;
+     ll x;
+     ll y;
 };
 
 
-Triplet extendedEuclid(int a, int b){
+Triplet extendedEuclid(ll a, ll b){
   if(b==0){
     Triplet smallans;
-    smallans.x = a;
+    smallans.x = 1;
     smallans.y = 0;
     smallans.gcd = a;
+    return smallans;
   }
   
   
@@ -23,40 +25,50 @@ Triplet extendedEuclid(int a, int b){
   myans.x = smallans.y;
   myans.y = (smallans.x -(a/b)*smallans.y);
   myans.gcd = smallans.gcd;
+  return myans;
 }
 
-int modInverse(int a,int b){
+
+ll gcd(ll a ,ll b){
     Triplet ans = extendedEuclid(a,b);
-    int m = ans.x;
+    ll m = ans.gcd;
     return m;
 }
 
-int sol (int a, int b, int c){
-  int y = c*modInverse(b,a);
-  int n = (c/b-y)/a;
+ll modInverse(ll a,ll b){
+    Triplet ans = extendedEuclid(a,b);
+    ll m = ans.x;
+    //cout<<m<<"------"<<endl;
+    return m;
+}
+
+ll sol (ll a, ll b, ll c){
+  ll y = ((c%a)*modInverse(b,a))%a;
+  if(c<y*b){
+      cout<<0<<endl;
+      //continue;
+  }
+  ll n = (c/b-y)/a;
   return n+1;
 }
 
 
 int main(){
 	int n;
-  scanf("%d",&n);
-  int a[n][3];
-  int b[n];
-  for(int i=0;i<n;i++){
-    for(int j=0;j<3;j++){
-      scanf("%d",&a[i][j]);
-    }
+	ll a,b,d;
+  cin>>n;
+  while(n--){
+      cin>>a>>b>>d;
+      ll g = gcd(a,b);
+      if(d%g!=0){
+          cout<<0<<endl;
+          continue;
+      }
+      a/=g;
+      b/=g;
+      d/=g;
+      cout<<sol(a,b,d)<<endl;
   }
   
-  for(int k=0;k<n;k++){
-    int m = sol(a[k][0],a[k][1],a[k][2]);
-    cout<<m<<endl;
-  }
-  
-  /*for(int m=0;m<n;m++){
-    printf("%d",b[m]);
-    printf("\n");
-  }*/
 	return 0;
 }
